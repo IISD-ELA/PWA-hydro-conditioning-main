@@ -17,7 +17,7 @@ To be able to run this pipeline, the user must have:
 1) installed Anaconda,
 2) configured Git and GitHub SSH access linked to their GitHub account and enabled Python extension on Visual Studio code,
 3) have familiarity using Windows command line,
-4) and have installed ```GDAL``` using the ```conda install -c conda-forge gdal``` on command line.
+4) and have ```GDAL``` installed using the ```conda install -c conda-forge gdal``` on command line.
 
 ## Setup Instructions
 ### 1. Clone this repository
