@@ -72,6 +72,20 @@ your-working-directory/
     └──  ...repository contents...
 ```
 
+### 4. Run the hydroconditioning script
+4.1 On Visual Studio Code's welcome page, open the ```PWA-hydro-conditioning-main``` folder by clicking "Open folder...":
+<img width="450" height="339" alt="image" src="https://github.com/user-attachments/assets/a307cdca-e5ce-4f85-8038-73004327e639" />
+
+4.2 Open up terminal on Visual Studio Code once again if it's not already open and cd into the ```PWA-hydro-conditioning-main``` folder if it's not already there.
+4.3 Run the following command to execute the hydro conditioning script. The script will ask you to input your watershed name as well as some file names.
+```bash
+python hydro_condition.py
+```
+4.4 Once the script has fully run, you will see the output files under the ```Data\<watershed name you entered when prompted>\HydroConditioning\Processed``` folder:
+
+You can also see any intermediate files in the ```...\Interim``` folder:
+
+
 
 
 
