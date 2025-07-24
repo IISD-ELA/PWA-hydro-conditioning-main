@@ -23,9 +23,11 @@ To be able to run this pipeline, the user must have:
 ### 1. Clone this repository and the pwa-tools repository
 1.1 Open the Visual Studio Code app on your desktop.
 1.2 Open a new Powershell terminal by using the toolbar on the top left corner.
+
 <img width="604" height="146" alt="image" src="https://github.com/user-attachments/assets/d3960591-8bfb-49e4-8c2c-9ad2cfa8a521" />
 
 Your terminal should look something like this:
+
 <img width="774" height="159" alt="image" src="https://github.com/user-attachments/assets/6c2e96e4-fb07-4790-b710-70f393fbacd4" />
 
 1.3 Clone this repository to your workspace by running the following command:
@@ -39,6 +41,7 @@ git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
 
 ### 2. Install the pwa-tools package
 2.1 Make sure you are working in an active conda environment. For example, in my case, the ```pwa_dev``` environment is active:
+
 <img width="731" height="59" alt="image" src="https://github.com/user-attachments/assets/9c70f1bd-080a-4ab3-a03e-f12206abf1db" />
 
 2.2 cd into the cloned ```PWA-hydro-conditioning-tools``` folder by running the following command:
@@ -46,6 +49,7 @@ git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
 cd PWA-hydro-conditioning-tools
 ```
 Your terminal should now look like this:
+
 <img width="772" height="32" alt="image" src="https://github.com/user-attachments/assets/5548fec5-ae87-46fb-92e6-ed6d1065a997" />
 
 2.3 Install the custom ```pwa-tools``` package in editable mode by running the following command. You must install it in editable mode for the pipeline to work correctly.
@@ -74,6 +78,7 @@ your-working-directory/
 
 ### 4. Run the hydroconditioning script
 4.1 On Visual Studio Code's welcome page, open the ```PWA-hydro-conditioning-main``` folder by clicking "Open folder...":
+
 <img width="450" height="339" alt="image" src="https://github.com/user-attachments/assets/a307cdca-e5ce-4f85-8038-73004327e639" />
 
 4.2 Open up terminal on Visual Studio Code once again if it's not already open and cd into the ```PWA-hydro-conditioning-main``` folder if it's not already there.
