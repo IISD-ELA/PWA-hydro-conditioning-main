@@ -83,9 +83,13 @@ python hydro_condition.py
 ```
 4.4 Once the script has fully run, you will see the output files under the ```Data\<watershed name you entered when prompted>\HydroConditioning\Processed``` folder:
 
+<img width="396" height="268" alt="image" src="https://github.com/user-attachments/assets/c48b59a7-3551-45eb-99a9-38567594141d" />
+
 You can also see any intermediate files in the ```...\Interim``` folder:
 
+<img width="404" height="304" alt="image" src="https://github.com/user-attachments/assets/37a4b00b-21c6-4825-9036-143331cf4745" />
 
+The output files include a depression depths raster .tif, depression depths shapefile, and a zonal statistics file for your watershed. 
 
 
 
