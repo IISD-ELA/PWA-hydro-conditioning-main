@@ -100,7 +100,7 @@ You can also see any intermediate files in the ```...\Interim``` folder:
 
 <img width="404" height="304" alt="image" src="https://github.com/user-attachments/assets/37a4b00b-21c6-4825-9036-143331cf4745" />
 
-The output files include a depression depths raster .tif, depression depths shapefile, and a zonal statistics file for your watershed. 
+The output files include a depression depths raster .tif, depression depths shapefile, and a zonal statistics file for your watershed by default, as well as a wetland polygons shapefile with statistics (area, total storage, and median depth) if the user chooses to generate it.
 
 
 
