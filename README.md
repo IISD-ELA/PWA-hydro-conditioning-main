@@ -56,7 +56,13 @@ Your terminal should now look like this:
 ```bash
 pip install -e .
 ```
-
+2.4 After installation, if the ```pwa-tools``` package was updated in the remote repository, you can locally update the package by uninstalling the package and re-installing it in editing mode:
+```bash
+pip uninstall pwa-tools
+```
+```bash
+pip install -e
+```
 ### 3. Prepare the input data
 Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder and download and extract the following zip files into it:
 - Watershed of interest based on outlet point from the [CLRH Hydrofabrics website](https://hydrology.uwaterloo.ca/CLRH/Hydrofabric.html) (e.g., ID: 05OE006 for Manning Canal)
