@@ -1,6 +1,6 @@
 """
 Code purpose: Hydro-condition a given Prairie watershed using custom pwa-tools module.
-Author: IISD-ELA
+Author: Idil Yaktubay, iyaktubay@iisd-ela.org (IISD-ELA)
 Last Updated: July 2025
 """
 # Import custom pwa-tools module (must be installed following instructions in README.md)
@@ -41,6 +41,7 @@ clrh_gdf = pwa.read_shapefile(filename=CLRH_FILENAME,
 # Merge rasters if multiple LiDAR DEM rasters are provided
 if MULTIPLE_LIDAR_RASTERS:
     LIDAR_FILENAME = pwa.merge_rasters(lidar_files=LIDAR_FILENAME,
+                                       gdf=clrh_gdf,
                                        dict=DIRECTORY_DICT)
 
 
@@ -100,6 +101,15 @@ DEPRESSIONS_RASTER_FILE = pwa.gen_depressions_raster(lidar_filename=LIDAR_FILENA
                            nhn_clipped_projected_lidar_file=NHN_CLIPPED_PROJECTED_LIDAR_FILE,
                            resolution_m=5,
                            dict=DIRECTORY_DICT)
+
+
+# Generate wetland polygons shapefile with stats (this is NOT required for RAVEN, user will skip if not needed)
+# Ask user if they want to generate a wetlands shapefile with stats
+WANT_WETLANDS_SHAPEFILE = pwa.hydrocon_usr_input().string("\"Yes\" if you would like to also generate a wetlands shapefile with stats (NOT required for RAVEN)", 
+                                                          "No")
+if WANT_WETLANDS_SHAPEFILE.lower() == "yes":
+    WETLAND_POLYGONS_FILE = pwa.gen_wetland_polygons(depressions_raster_file=DEPRESSIONS_RASTER_FILE,
+                                                     dict=DIRECTORY_DICT)
 
 
 # Calculate depression depths
