@@ -61,7 +61,7 @@ pip install -e .
 pip uninstall pwa-tools
 ```
 ```bash
-pip install -e
+pip install -e .
 ```
 ### 3. Prepare the input data
 Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder and download and extract the following zip files into it:
