@@ -39,11 +39,7 @@ Your terminal should look something like this:
 (base) PS C:\Users\iyaktubay> git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
 ```
 ### 2. Create and activate your environment
-2.1 Find and open the Anaconda PowerShell Prompt App:
-
-<img width="320" height="64" alt="image" src="https://github.com/user-attachments/assets/1b558f82-b41e-404e-a110-4684fbd97c8c" />
-
-2.2 In the command line, change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder.
+2.1 In the command line, change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder.
 You can do this with the ```cd``` command, followed by a space and the path to the folder (relative to your current location). For example, if the cloned folder is located ```C:\Users\iyaktubay\PWA-hydro-conditioning-main``` and your current location is ```C:\Users\iyaktubay```, then the appropriate command would be:
 ```bash
 (base) PS C:\Users\iyaktubay> cd PWA-hydro-conditioning-main
@@ -52,12 +48,10 @@ And, after running the command, your terminal would look like this:
 ```bash
 (base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
 ```
-
 2.3 Now that your working directory is the ```PWA-hydro-conditioning-tools``` folder, you can create your environment by running the following command:
 ```bash
 (base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda env create -f hydrocon_env.yml
 ```
-
 2.4 After the environment has been created, it can be activated by running the following command:
 ```bash
 (base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda activate test_env
@@ -67,22 +61,21 @@ And, after running the command, your terminal will look like this:
 (hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
 ```
 ### 3. Install the pwa-tools package
-3.1 Make sure you are working in the activated ```hydrocon_env``` environment from the previous steps. Your terminal should look like this:
+3.1 Make sure you are working in the activated ```hydrocon_env``` environment from the previous steps. Your terminal should look something like this:
 ```bash
-
-<img width="731" height="59" alt="image" src="https://github.com/user-attachments/assets/9c70f1bd-080a-4ab3-a03e-f12206abf1db" />
-
-2.2 cd into the cloned ```PWA-hydro-conditioning-tools``` folder by running the following command:
+(hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
+```
+2.2 Change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder by running the following command (change the path to match yours):
 ```bash
-cd PWA-hydro-conditioning-tools
+(hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> cd C:\Users\iyaktubay\PWA-hydro-conditioning-tools
 ```
 Your terminal should now look like this:
-
-<img width="772" height="32" alt="image" src="https://github.com/user-attachments/assets/5548fec5-ae87-46fb-92e6-ed6d1065a997" />
-
+```bash
+(hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools>
+```
 2.3 Install the custom ```pwa-tools``` package in editable mode by running the following command. You must install it in editable mode for the pipeline to work correctly.
 ```bash
-pip install -e .
+(hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools> pip install -e .
 ```
 2.4 After installation, if the ```pwa-tools``` package was updated in the remote repository, you can locally update the package by uninstalling the package and re-installing it in editing mode:
 ```bash
