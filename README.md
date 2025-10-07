@@ -4,7 +4,7 @@ Author: Idil Yaktubay, iyaktubay@iisd-ela.org (IISD-ELA)
 This repository provides a workflow to hydro-condition Prairie watersheds using the ```hydro_condition.py``` script. It is designed for use with the custom [PWA-hydro-conditioning-tools](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) Python package, and requires certain datasets as input.
 
 ## Repository Structure
-```bash
+```powershell
 PWA-hydro-conditioning-main/                  
 ├── hydro_condition_py.py       # Main script to run the hydro-conditioning pipeline
 ├── README.md                   # This documentation
@@ -27,15 +27,15 @@ To be able to run this pipeline, the user must have:
 <img width="604" height="146" alt="image" src="https://github.com/user-attachments/assets/d3960591-8bfb-49e4-8c2c-9ad2cfa8a521" />
 
 Your terminal should look something like this:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay>
 ```
 1.3 Clone this repository to your workspace by running the following command:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay> git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-main.git
 ```
 1.4 In the same workspace, clone the [pwa-tools repository](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) by running the following command:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay> git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
 ```
 1.5 Close the Visual Studio Code app.
@@ -46,23 +46,23 @@ Your terminal should look something like this:
 
 2.2 In the command line, change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder.
 You can do this with the ```cd``` command, followed by a space and the path to the folder (relative to your current location). For example, if the cloned folder is located ```C:\Users\iyaktubay\PWA-hydro-conditioning-main``` and your current location is ```C:\Users\iyaktubay```, then the appropriate command would be:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay> cd PWA-hydro-conditioning-main
 ```
 And, after running the command, your terminal would look like this:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
 ```
 2.3 Now that your working directory is the ```PWA-hydro-conditioning-tools``` folder, you can create your environment by running the following command:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda env create -f hydrocon_env.yml
 ```
 2.4 To confirm that your environment has been successfully created, you can run the following command:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda env list
 ```
 This should return something like this:
-```bash
+```powershell
 # conda environments:
 #
 base                  *  C:\Users\iyaktubay\AppData\Local\anaconda3
@@ -74,35 +74,45 @@ test_env                 C:\Users\iyaktubay\AppData\Local\anaconda3\envs\test_en
 ```
 ### 3. Install the pwa-tools package
 3.1 Reopen the Visual Studio Code app and open a new PowerShell terminal just as you did in step 1.2. Your terminal should look like:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay>
 ```
 3.2 Activate the ```hydrocon_env``` environment you have created in step 2 by running the following command:
-```bash
+```powershell
 (base) PS C:\Users\iyaktubay> conda activate hydrocon_env
 ```
 Your terminal should now look something like this:
-```bash
+```powershell
 (hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
 ```
 3.3 Change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder by running the following command (change the path to match your relative path):
-```bash
-(hydrocon_dev) PS C:\Users\iyaktubayn> cd PWA-hydro-conditioning-tools
+```powershell
+(hydrocon_dev) PS C:\Users\iyaktubay> cd PWA-hydro-conditioning-tools
 ```
 Your terminal should now look like this:
-```bash
+```powershell
 (hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools>
 ```
 2.3 Install the custom ```pwa-tools``` package in editable mode by running the following command. You must install it in editable mode for the pipeline to work correctly.
-```bash
+```powershell
 (hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools> pip install -e .
 ```
 2.4 After installation, if the ```pwa-tools``` package was updated in the remote repository, you can locally update the package by uninstalling the package and re-installing it in editing mode:
-```bash
-pip uninstall pwa-tools
+```powershell
+(hydrocon_env) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools> pip uninstall pwa-tools
 ```
-```bash
-pip install -e .
+```powershell
+(hydrocon_env) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools> pip install -e .
+```
+You can check whether the package was updated in the remote repository by running the following command: 
+```powershell
+(hydrocon_env) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools> git status
+```
+If the package is up to date, you should see something like this:
+```powershell
+(hydrocon_env) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools> git status
+On branch main
+Your branch is up to date with 'origin/main'.
 ```
 ### 3. Prepare the input data
 Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder and download and extract the following zip files into it:
@@ -111,7 +121,7 @@ Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder 
 - Raster DEM(s) of interest from [LiDAR DEMs](https://mli.gov.mb.ca/dems/index_external_lidar.html) (e.g., Seine & Rat 2016 for Manning Canal)
 
 Your local workspace should now have the following structure:
-```bash
+```powershell
 your-working-directory/
 ├── PWA-hydro-conditioning-main/
     ├── hydro_condition.py
@@ -128,9 +138,9 @@ your-working-directory/
 
 <img width="450" height="339" alt="image" src="https://github.com/user-attachments/assets/a307cdca-e5ce-4f85-8038-73004327e639" />
 
-4.2 Open up terminal on Visual Studio Code once again if it's not already open and cd into the ```PWA-hydro-conditioning-main``` folder if it's not already there.
+4.2 Open up terminal on Visual Studio Code once again if it's not already open and change your working directory to the ```PWA-hydro-conditioning-main``` folder if it's not already there.
 4.3 Run the following command to execute the hydro conditioning script. The script will ask you to input your watershed name as well as some file names.
-```bash
+```powershell
 python hydro_condition.py
 ```
 4.4 Once the script has fully run, you will see the output files under the ```Data\<watershed name you entered when prompted>\HydroConditioning\Processed``` folder:
