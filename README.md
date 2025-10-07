@@ -13,11 +13,11 @@ PWA-hydro-conditioning-main/
 ```
 
 ## Prerequisites
-To be able to run this pipeline, the user must have: 
-1) installed Anaconda,
+To be able to run this pipeline, the user must have done the following:
+1) **Install Anaconda**: You can install the latest version of Anaconda [here](https://www.anaconda.com/download). While any recent version of Conda should work, this documentation was prepared using Conda version **24.9.2**. If you encounter issues that may be related to your Conda version, please reach out to us. We recommend installing the full Anaconda distribution (rather than Miniconda), as the steps in this documentation assume a full Conda installation.
 2) configured Git and GitHub SSH access linked to their GitHub account and enabled Python extension on Visual Studio code,
-3) have familiarity using Windows command line,
-4) and have ```GDAL``` installed using the ```conda install -c conda-forge gdal``` on command line. You can verify the install with ```gdalinfo --version```.
+3) and have ```GDAL``` installed using the ```conda install -c conda-forge gdal``` on command line. You can verify the install with ```gdalinfo --version```.
+
 
 ## Setup Instructions
 ### 1. Clone this repository and the pwa-tools repository
@@ -114,8 +114,8 @@ If the package is up to date, you should see something like this:
 On branch main
 Your branch is up to date with 'origin/main'.
 ```
-### 3. Prepare the input data
-Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder and download and extract the following zip files into it:
+### 4. Prepare the input data
+Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder and download and extract the following zip files into it. Do **not** create any subfolders in the ```Data/``` folder as the ```hydro_condition.py``` script expects all data files to **not** be in subfolders. The script will automatically organize input and output files into subfolders itself.
 - Watershed of interest based on outlet point from the [CLRH Hydrofabrics website](https://hydrology.uwaterloo.ca/CLRH/Hydrofabric.html) (e.g., ID: 05OE006 for Manning Canal)
 - Streams dataset of interest from [NHN streams website](https://ftp.maps.canada.ca/pub/nrcan_rncan/vector/geobase_nhn_rhn/shp_en/) (e.g., ngn_rhn_05oe000_shp_en.zip for Manning Canal)
 - Raster DEM(s) of interest from [LiDAR DEMs](https://mli.gov.mb.ca/dems/index_external_lidar.html) (e.g., Seine & Rat 2016 for Manning Canal)
@@ -133,17 +133,17 @@ your-working-directory/
     └──  ...repository contents...
 ```
 
-### 4. Run the hydroconditioning script
-4.1 On Visual Studio Code's welcome page, open the ```PWA-hydro-conditioning-main``` folder by clicking "Open folder...":
+### 5. Run the hydroconditioning script
+5.1 On Visual Studio Code's welcome page, open the ```PWA-hydro-conditioning-main``` folder by clicking "Open folder...":
 
 <img width="450" height="339" alt="image" src="https://github.com/user-attachments/assets/a307cdca-e5ce-4f85-8038-73004327e639" />
 
-4.2 Open up terminal on Visual Studio Code once again if it's not already open and change your working directory to the ```PWA-hydro-conditioning-main``` folder if it's not already there.
-4.3 Run the following command to execute the hydro conditioning script. The script will ask you to input your watershed name as well as some file names.
+5.2 Open up terminal on Visual Studio Code once again if it's not already open and change your working directory to the ```PWA-hydro-conditioning-main``` folder if it's not already there.
+5.3 Run the following command to execute the hydro conditioning script. The script will ask you to input your watershed name as well as some file names.
 ```powershell
 python hydro_condition.py
 ```
-4.4 Once the script has fully run, you will see the output files under the ```Data\<watershed name you entered when prompted>\HydroConditioning\Processed``` folder:
+5.4 Once the script has fully run, you will see the output files under the ```Data\<watershed name you entered when prompted>\HydroConditioning\Processed``` folder:
 
 <img width="396" height="268" alt="image" src="https://github.com/user-attachments/assets/c48b59a7-3551-45eb-99a9-38567594141d" />
 
@@ -152,6 +152,9 @@ You can also see any intermediate files in the ```...\Interim``` folder:
 <img width="404" height="304" alt="image" src="https://github.com/user-attachments/assets/37a4b00b-21c6-4825-9036-143331cf4745" />
 
 The output files include a depression depths raster .tif, depression depths shapefile, and a zonal statistics file for your watershed by default, as well as a wetland polygons shapefile with statistics (area, total storage, and median depth) if the user chooses to generate it.
+
+### 6. Support
+For support, please contact us at eladata@iisd.net.
 
 
 
