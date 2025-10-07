@@ -27,22 +27,48 @@ To be able to run this pipeline, the user must have:
 <img width="604" height="146" alt="image" src="https://github.com/user-attachments/assets/d3960591-8bfb-49e4-8c2c-9ad2cfa8a521" />
 
 Your terminal should look something like this:
-
-<img width="774" height="159" alt="image" src="https://github.com/user-attachments/assets/6c2e96e4-fb07-4790-b710-70f393fbacd4" />
-
+```bash
+(base) PS C:\Users\iyaktubay>
+```
 1.3 Clone this repository to your workspace by running the following command:
 ```bash
-git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-main.git
+(base) PS C:\Users\iyaktubay> git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-main.git
 ```
 1.4 In the same workspace, clone the [pwa-tools repository](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) by running the following command:
 ```bash
-git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
+(base) PS C:\Users\iyaktubay> git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
+```
+### 2. Create and activate your environment
+2.1 Find and open the Anaconda PowerShell Prompt App:
+
+<img width="320" height="64" alt="image" src="https://github.com/user-attachments/assets/1b558f82-b41e-404e-a110-4684fbd97c8c" />
+
+2.2 In the command line, change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder.
+You can do this with the ```cd``` command, followed by a space and the path to the folder (relative to your current location). For example, if the cloned folder is located ```C:\Users\iyaktubay\PWA-hydro-conditioning-main``` and your current location is ```C:\Users\iyaktubay```, then the appropriate command would be:
+```bash
+(base) PS C:\Users\iyaktubay> cd PWA-hydro-conditioning-main
+```
+And, after running the command, your terminal would look like this:
+```bash
+(base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
 ```
 
-### 2. Install the pwa-tools package
-2.1 
+2.3 Now that your working directory is the ```PWA-hydro-conditioning-tools``` folder, you can create your environment by running the following command:
+```bash
+(base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda env create -f hydrocon_env.yml
+```
 
-2.1 Make sure you are working in an active conda environment. For example, in my case, the ```pwa_dev``` environment is active:
+2.4 After the environment has been created, it can be activated by running the following command:
+```bash
+(base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda activate test_env
+```
+And, after running the command, your terminal will look like this:
+```bash
+(hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
+```
+### 3. Install the pwa-tools package
+3.1 Make sure you are working in the activated ```hydrocon_env``` environment from the previous steps. Your terminal should look like this:
+```bash
 
 <img width="731" height="59" alt="image" src="https://github.com/user-attachments/assets/9c70f1bd-080a-4ab3-a03e-f12206abf1db" />
 
