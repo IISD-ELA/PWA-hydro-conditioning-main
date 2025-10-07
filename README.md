@@ -93,11 +93,11 @@ Your terminal should now look like this:
 ```powershell
 (hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools>
 ```
-2.3 Install the custom ```pwa-tools``` package in editable mode by running the following command. You must install it in editable mode for the pipeline to work correctly.
+3.4 Install the custom ```pwa-tools``` package in editable mode by running the following command. You must install it in editable mode for the pipeline to work correctly.
 ```powershell
 (hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools> pip install -e .
 ```
-2.4 After installation, if the ```pwa-tools``` package was updated in the remote repository, you can locally update the package by uninstalling the package and re-installing it in editing mode:
+3.5 After installation, if the ```pwa-tools``` package was updated in the remote repository, you can locally update the package by uninstalling the package and re-installing it in editing mode:
 ```powershell
 (hydrocon_env) PS C:\Users\iyaktubay\PWA-hydro-conditioning-tools> pip uninstall pwa-tools
 ```
