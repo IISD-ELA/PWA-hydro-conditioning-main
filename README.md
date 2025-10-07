@@ -40,6 +40,8 @@ git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
 ```
 
 ### 2. Install the pwa-tools package
+2.1 
+
 2.1 Make sure you are working in an active conda environment. For example, in my case, the ```pwa_dev``` environment is active:
 
 <img width="731" height="59" alt="image" src="https://github.com/user-attachments/assets/9c70f1bd-080a-4ab3-a03e-f12206abf1db" />
