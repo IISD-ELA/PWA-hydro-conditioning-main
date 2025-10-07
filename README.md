@@ -153,8 +153,8 @@ You can also see any intermediate files in the ```...\Interim``` folder:
 
 The output files include a depression depths raster .tif, depression depths shapefile, and a zonal statistics file for your watershed by default, as well as a wetland polygons shapefile with statistics (area, total storage, and median depth) if the user chooses to generate it.
 
-### 6. Support
-For support, please contact us at eladata@iisd.net.
+### 6. Contact and support
+For support or any other inquiries, please contact us at eladata@iisd.net.
 
 
 
