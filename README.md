@@ -38,8 +38,13 @@ Your terminal should look something like this:
 ```bash
 (base) PS C:\Users\iyaktubay> git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
 ```
-### 2. Create and activate your environment
-2.1 In the command line, change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder.
+1.5 Close the Visual Studio Code app.
+### 2. Create your environment
+2.1 Navigate to the Anaconda PowerShell Prompt App: 
+
+<img width="292" height="66" alt="image" src="https://github.com/user-attachments/assets/aac6a61a-4dc6-48e4-90bc-b97c5ac431c9" />
+
+2.2 In the command line, change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder.
 You can do this with the ```cd``` command, followed by a space and the path to the folder (relative to your current location). For example, if the cloned folder is located ```C:\Users\iyaktubay\PWA-hydro-conditioning-main``` and your current location is ```C:\Users\iyaktubay```, then the appropriate command would be:
 ```bash
 (base) PS C:\Users\iyaktubay> cd PWA-hydro-conditioning-main
@@ -52,22 +57,37 @@ And, after running the command, your terminal would look like this:
 ```bash
 (base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda env create -f hydrocon_env.yml
 ```
-2.4 After the environment has been created, it can be activated by running the following command:
+2.4 To confirm that your environment has been successfully created, you can run the following command:
 ```bash
-(base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda activate test_env
+(base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> conda env list
 ```
-And, after running the command, your terminal will look like this:
+This should return something like this:
 ```bash
-(hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
+# conda environments:
+#
+base                  *  C:\Users\iyaktubay\AppData\Local\anaconda3
+geotest                  C:\Users\iyaktubay\AppData\Local\anaconda3\envs\geotest
+hydrocon_env             C:\Users\iyaktubay\AppData\Local\anaconda3\envs\hydrocon_env
+pwa_dev                  C:\Users\iyaktubay\AppData\Local\anaconda3\envs\pwa_dev
+test_env                 C:\Users\iyaktubay\AppData\Local\anaconda3\envs\test_env
+(base) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
 ```
 ### 3. Install the pwa-tools package
-3.1 Make sure you are working in the activated ```hydrocon_env``` environment from the previous steps. Your terminal should look something like this:
+3.1 Reopen the Visual Studio Code app and open a new PowerShell terminal just as you did in step 1.2. Your terminal should look like:
+```bash
+(base) PS C:\Users\iyaktubay>
+```
+3.2 Activate the ```hydrocon_env``` environment you have created in step 2 by running the following command:
+```bash
+(base) PS C:\Users\iyaktubay> conda activate hydrocon_env
+```
+Your terminal should now look something like this:
 ```bash
 (hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
 ```
-2.2 Change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder by running the following command (change the path to match yours):
+3.3 Change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder by running the following command (change the path to match your relative path):
 ```bash
-(hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main> cd C:\Users\iyaktubay\PWA-hydro-conditioning-tools
+(hydrocon_dev) PS C:\Users\iyaktubayn> cd PWA-hydro-conditioning-tools
 ```
 Your terminal should now look like this:
 ```bash
