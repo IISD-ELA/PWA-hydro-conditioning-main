@@ -1,5 +1,6 @@
 # PWA-hydro-conditioning-main
 Author: Idil Yaktubay, iyaktubay@iisd-ela.org (IISD-ELA)
+Owner: IISD-ELA
 
 This repository provides a workflow to hydro-condition Prairie watersheds using the ```hydro_condition.py``` script. It is designed for use with the custom [PWA-hydro-conditioning-tools](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) Python package, and requires certain datasets as input.
 
@@ -13,10 +14,20 @@ PWA-hydro-conditioning-main/
 ```
 
 ## Prerequisites
-To be able to run this pipeline, the user must have done the following:
+To be able to run this pipeline, the user must do the following:
 1) **Install Anaconda**: You can install the latest version of Anaconda [here](https://www.anaconda.com/download). While any recent version of Conda should work, this documentation was prepared using Conda version **24.9.2**. If you encounter issues that may be related to your Conda version, please reach out to us. We recommend installing the full Anaconda distribution (rather than Miniconda), as the steps in this documentation assume a full Conda installation.
-2) configured Git and GitHub SSH access linked to their GitHub account and enabled Python extension on Visual Studio code,
-3) and have ```GDAL``` installed using the ```conda install -c conda-forge gdal``` on command line. You can verify the install with ```gdalinfo --version```.
+2) **Configure Git**:
+   
+    2(a) If you don't already have one, [create a GitHub account](https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github#signing-up-for-a-new-personal-account).
+   
+   2(b) Download and install Git to your desktop from the [official site](https://git-scm.com/downloads).
+   
+   2(c) Connect your local machine to GitHub using SSH. This allows you to securely clone and push repositories without typing your password everytime. For step-by-step instructions, see [GitHub's official documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+   
+   2(d) Install and enable the Python extension in VS Code from the Extensions panel in VS Code:
+
+   <img width="593" height="359" alt="image" src="https://github.com/user-attachments/assets/e6bbe9d9-b95c-48eb-a5b7-4b3f5f24455d" />
+4) **Install GDAL**: GDAL is a geospatial data processing software that our hydro-conditioning product utilizes. You can install ```GDAL``` by running the ```conda install -c conda-forge gdal```command on Anaconda PowerShell Prompt. You can verify the install with ```gdalinfo --version```.
 
 
 ## Setup Instructions
