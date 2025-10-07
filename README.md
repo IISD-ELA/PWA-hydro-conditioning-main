@@ -8,6 +8,7 @@ This repository provides a workflow to hydro-condition Prairie watersheds using 
 PWA-hydro-conditioning-main/                  
 ├── hydro_condition_py.py       # Main script to run the hydro-conditioning pipeline
 ├── README.md                   # This documentation
+├── hydrocon_env.yml            # Environment file for the hydro-conditioning pipeline
 └── .gitignore                  # File that tells Git to ignore the "Data" folder created by the user
 
 ```
