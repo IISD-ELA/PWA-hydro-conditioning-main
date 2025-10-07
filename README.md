@@ -128,7 +128,10 @@ Your branch is up to date with 'origin/main'.
 ### 4. Prepare the input data
 Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder and download and extract the following zip files into it. Do **not** create any subfolders in the ```Data/``` folder as the ```hydro_condition.py``` script expects all data files to **not** be in subfolders. The script will automatically organize input and output files into subfolders itself.
 - Watershed of interest based on outlet point from the [CLRH Hydrofabrics website](https://hydrology.uwaterloo.ca/CLRH/Hydrofabric.html) (e.g., ID: 05OE006 for Manning Canal)
-- Streams dataset of interest from [NHN streams website](https://ftp.maps.canada.ca/pub/nrcan_rncan/vector/geobase_nhn_rhn/shp_en/) (e.g., ngn_rhn_05oe000_shp_en.zip for Manning Canal)
+- Streams dataset of interest from [NHN streams website](https://ftp.maps.canada.ca/pub/nrcan_rncan/vector/geobase_nhn_rhn/shp_en/).
+     1. In the directory, open the folder named with the first two digits of your CLRH station ID (e.g., open the ```05/``` folder if your CLRH station ID is ```05OE006```).
+     2. Download the ```.zip``` file whose name contains the third and fourth digits of your CLRH station ID (e.g., download ```nhn_rhn_05oe000_shp...``` if your CLRH station ID is ```05OE006```).
+     3. If multiple ```.zip``` files match, download both and check which shapefile covers the geographic extent of your watershed. You can do this by using a GIS tool such as ArcGIS.
 - Raster DEM(s) of interest from [LiDAR DEMs](https://mli.gov.mb.ca/dems/index_external_lidar.html) (e.g., Seine & Rat 2016 for Manning Canal)
 
 Your local workspace should now have the following structure:
