@@ -1,6 +1,5 @@
 # PWA-hydro-conditioning-main
-Author: Idil Yaktubay, iyaktubay@iisd-ela.org (IISD-ELA)
-Owner: IISD-ELA
+Author: Idil Yaktubay (iyaktubay@iisd-ela.org), IISD-ELA
 
 This repository provides a workflow to hydro-condition Prairie watersheds using the ```hydro_condition.py``` script. It is designed for use with the custom [PWA-hydro-conditioning-tools](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) Python package, and requires certain datasets as input.
 
