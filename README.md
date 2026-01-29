@@ -94,7 +94,7 @@ test_env                 C:\Users\iyaktubay\AppData\Local\anaconda3\envs\test_en
 ```
 Your terminal should now look something like this:
 ```powershell
-(hydrocon_dev) PS C:\Users\iyaktubay\PWA-hydro-conditioning-main>
+(hydrocon_dev) PS C:\Users\iyaktubay>
 ```
 3.3 Change your working directory to the cloned ```PWA-hydro-conditioning-tools``` folder by running the following command (change the path to match your relative path):
 ```powershell
