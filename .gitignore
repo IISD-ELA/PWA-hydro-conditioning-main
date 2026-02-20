@@ -1,2 +1,5 @@
 Data/
 .vscode/
+
+!Data/cypress_river/HydroConditioning/Raw
+ 
