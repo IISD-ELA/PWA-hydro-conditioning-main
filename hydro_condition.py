@@ -83,9 +83,18 @@ clrh_gdf_projected_to_nhn, CLRH_PROJ_NHN_FILE = pwa.project_crs_subbasins_to_nhn
                                                          subbasins_gdf=clrh_gdf,
                                                          subbasins_filename=pwa.state.CLRH_FILENAME)
 
+if len(pwa.state.CULVERT_FILENAME) > 0:
+    culvert_gdf = pwa.read_shapefile(filename=pwa.state.CULVERT_FILENAME, 
+                                      directory=pwa.state.HYDROCON_RAW_PATH)
+    
+    burn_lines_gdf = pwa.append_culvert_lines(channels_gdf=nhn_gdf, culvert_gdf=culvert_gdf) ## Requires adding culverts to the initial set-up
+
+else:
+    burn_lines_gdf = nhn_gdf
+
 
 # Clip NHN streams shapefile to watershed
-NHN_CLIPPED_PROJECTED_LIDAR_FILE = pwa.clip_nhn_to_watershed(nhn_filename=pwa.state.NHN_FILENAME, 
+NHN_CLIPPED_PROJECTED_LIDAR_FILE = pwa.clip_nhn_to_watershed(nhn_filename="burn_lines", 
                                                         clrh_proj_nhn_file=CLRH_PROJ_NHN_FILE,
                                                         input_DEM_crs=input_lidar_crs,
                                                         input_DEM_crs_alnum=input_lidar_crs_alnum)
