@@ -133,6 +133,7 @@ Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder 
      2. Download the ```.zip``` file whose name contains the third and fourth digits of your CLRH station ID (e.g., download ```nhn_rhn_05oe000_shp...``` if your CLRH station ID is ```05OE006```).
      3. If multiple ```.zip``` files match, download both and check which shapefile covers the geographic extent of your watershed. You can do this by using a GIS tool such as ArcGIS.
 - Raster DEM(s) of interest from [LiDAR DEMs](https://mli.gov.mb.ca/dems/index_external_lidar.html) (e.g., Seine & Rat 2016 for Manning Canal)
+- Culvert inventory (optional): Prepare your culvert inventory (only Shapefiles in Line format are currently accepted)
 
 Your local workspace should now have the following structure:
 ```powershell

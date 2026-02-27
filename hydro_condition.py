@@ -41,7 +41,7 @@ clrh_gdf = pwa.read_shapefile(filename=pwa.state.CLRH_FILENAME,
 
 # Merge rasters if multiple LiDAR DEM rasters are provided
 if pwa.state.MULTIPLE_LIDAR_RASTERS:
-    LIDAR_FILENAME = pwa.merge_rasters(lidar_files=pwa.state.LIDAR_FILENAME,
+    pwa.state.LIDAR_FILENAME = pwa.merge_rasters(lidar_files=pwa.state.LIDAR_FILENAME,
                                        gdf=clrh_gdf)
 
 
