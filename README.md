@@ -1,16 +1,22 @@
 # PWA-hydro-conditioning-main
 Author: Idil Yaktubay (iyaktubay@iisd-ela.org), IISD-ELA
 
-This repository provides a workflow to hydro-condition Prairie watersheds using the ```hydro_condition.py``` script. It is designed for use with the custom [PWA-hydro-conditioning-tools](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) Python package, and requires certain datasets as input.
+This repository provides a workflow to hydro-condition Prairie watersheds. It is designed for use with the custom [PWA-hydro-conditioning-tools](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) Python package, and requires certain datasets as input.
+
+Two entry-point scripts ship with this repository:
+
+* **`hydro_condition_v2.py`** *(recommended)* — declarative runner that reads a `pwa_config.yml` file and uses the modern `pwa_tools.runner.run_step0` API. Activates the bug fixes added during the 2026 cleanup project (BUG-001 through BUG-021).
+* **`hydro_condition.py`** *(legacy)* — original interactive runner that prompts for input via stdin. Still functional; will be deprecated once the v2 UX is signed off.
 
 ## Repository Structure
 ```powershell
-PWA-hydro-conditioning-main/                  
-├── hydro_condition_py.py       # Main script to run the hydro-conditioning pipeline
+PWA-hydro-conditioning-main/
+├── hydro_condition_v2.py       # Recommended runner — reads pwa_config.yml
+├── hydro_condition.py          # Legacy runner — interactive input() prompts
+├── pwa_config.example.yml      # Sample config for hydro_condition_v2.py
 ├── README.md                   # This documentation
-├── hydrocon_env.yml            # Environment file for the hydro-conditioning pipeline
-└── .gitignore                  # File that tells Git to ignore the "Data" folder created by the user
-
+├── hydrocon_env.yml            # Conda environment file
+└── .gitignore                  # Tells Git to ignore the "Data" folder
 ```
 
 ## Prerequisites
@@ -154,10 +160,35 @@ your-working-directory/
 <img width="450" height="339" alt="image" src="https://github.com/user-attachments/assets/a307cdca-e5ce-4f85-8038-73004327e639" />
 
 5.2 Open up terminal on Visual Studio Code once again if it's not already open and change your working directory to the ```PWA-hydro-conditioning-main``` folder if it's not already there.
-5.3 Run the following command to execute the hydro conditioning script. The script will ask you to input your watershed name as well as some file names.
+
+5.3 Run the pipeline. **Two options**:
+
+#### Option A (recommended): `hydro_condition_v2.py` with a config file
+
+Generate a config file once (interactively):
+```powershell
+python -m pwa_tools.init_config pwa_config.yml
+```
+The prompts mirror the legacy script's. Or, copy `pwa_config.example.yml` to `pwa_config.yml` and edit by hand.
+
+Then run the pipeline as many times as you like:
+```powershell
+python hydro_condition_v2.py
+python hydro_condition_v2.py --wetlands           # also generate wetlands shapefile
+python hydro_condition_v2.py --log-level DEBUG    # extra diagnostic output
+python hydro_condition_v2.py --config other.yml   # alternative config
+```
+
+The new runner fails fast (with a clear error listing every missing file) if your `Data/` folder is incomplete, instead of crashing partway through a 30-minute LiDAR resample.
+
+#### Option B (legacy): `hydro_condition.py` interactive prompts
+
+The original script that asks for filenames on every run:
 ```powershell
 python hydro_condition.py
 ```
+Still supported during the migration period.
+
 5.4 Once the script has fully run, you will see the output files under the ```Data\<watershed name you entered when prompted>\HydroConditioning\Processed``` folder:
 
 <img width="396" height="268" alt="image" src="https://github.com/user-attachments/assets/c48b59a7-3551-45eb-99a9-38567594141d" />
