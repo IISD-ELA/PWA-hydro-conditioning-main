@@ -5,7 +5,7 @@ This repository provides a workflow to hydro-condition Prairie watersheds. It is
 
 Two entry-point scripts ship with this repository:
 
-* **`hydro_condition_v2.py`** *(recommended)* — declarative runner that reads a `pwa_config.yml` file and uses the modern `pwa_tools.runner.run_step0` API. Activates the bug fixes added during the 2026 cleanup project (BUG-001 through BUG-021).
+* **`hydro_condition_v2.py`** *(recommended)* — declarative runner that reads a `pwa_config.yml` file and uses the modern `pwa_tools.runner.run_step0` API. Activates the bug fixes and cross-platform improvements landed during the 2026 cleanup of `pwa_tools`.
 * **`hydro_condition.py`** *(legacy)* — original interactive runner that prompts for input via stdin. Still functional; will be deprecated once the v2 UX is signed off.
 
 ## Repository Structure

@@ -6,8 +6,8 @@ Differences from v1:
   * Configuration comes from a YAML file (``pwa_config.yml`` by default),
     not from interactive ``input()`` prompts.
   * Uses the new modular ``pwa_tools.runner.run_step0`` API, which
-    activates the bug fixes added during the 2026 cleanup project
-    (BUG-001 through BUG-021 — see the upstream bug-tracker).
+    activates the bug fixes and cross-platform improvements landed
+    during the 2026 cleanup of ``pwa_tools``.
   * Fails fast if expected input files are missing — saves the user
     from a 30-minute LiDAR resample crashing on a missing shapefile.
   * Status output goes through the standard ``logging`` module, so
