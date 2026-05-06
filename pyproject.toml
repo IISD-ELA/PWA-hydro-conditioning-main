@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pwa"
+version = "0.1.0"
+description = "PWA pipeline orchestrator — single install + unified CLI for Steps 0–3"
+readme = "README.md"
+requires-python = ">=3.10"
+# This package's only job is to depend on the four pipeline packages and
+# expose stable CLI commands (pwa-step0 .. pwa-step3, pwa-init-step0 ..
+# pwa-init-step3). All actual logic lives in the dependency packages.
+dependencies = [
+    "pwa-tools",
+    "pwa-raven",
+    "pwa-calibration",
+]
+# GDAL (osgeo) is required by pwa-tools for merge_rasters but cannot be
+# pip-installed. Install via conda:  conda install -c conda-forge gdal
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+]
+
+[project.scripts]
+# Pipeline-step entry points — every step uses the same command shape
+# (`pwa-<name> --config <yaml>`), so users have one mental model
+# regardless of which underlying package owns the logic.
+pwa-hydrocondition = "pwa_tools.run_step0:main"
+pwa-nc-processing = "pwa_raven.run_nc_processing:main"
+pwa-raven-inputs = "pwa_raven.run_raven_inputs:main"
+pwa-calibrate = "pwa_calibration.runner:main"
+
+# Interactive config builders — one per step, parallel naming.
+pwa-init-hydrocondition = "pwa_tools.init_config:main"
+pwa-init-nc-processing = "pwa_raven.init_nc_processing_config:main"
+pwa-init-raven-inputs = "pwa_raven.init_raven_inputs_config:main"
+pwa-init-calibration = "pwa_calibration.init_config:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

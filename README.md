@@ -1,19 +1,73 @@
 # PWA-hydro-conditioning-main
 Author: Idil Yaktubay (iyaktubay@iisd-ela.org), IISD-ELA
 
-This repository provides a workflow to hydro-condition Prairie watersheds. It is designed for use with the custom [PWA-hydro-conditioning-tools](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) Python package, and requires certain datasets as input.
+This repository is the **orchestrator entry point** for the PWA pipeline. Installing it gives you a unified command-line interface (`pwa-step0` … `pwa-step3`) for the four packages that implement the pipeline:
 
-Two entry-point scripts ship with this repository:
+| Package | Step(s) it owns | Source repo |
+|---|---|---|
+| [`pwa-tools`](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) | Step 0 — hydro-conditioning | PWA-hydro-conditioning-tools |
+| [`pwa-raven`](https://github.com/IISD-ELA/PWA) | Steps 1 & 2 — NetCDF processing + Raven inputs | PWA / pwa_raven |
+| [`pwa-calibration`](https://github.com/IISD-ELA/PWA) | Step 3 — calibration | PWA / pwa_calibration |
 
-* **`hydro_condition_v2.py`** *(recommended)* — declarative runner that reads a `pwa_config.yml` file and uses the modern `pwa_tools.runner.run_step0` API. Activates the bug fixes and cross-platform improvements landed during the 2026 cleanup of `pwa_tools`.
-* **`hydro_condition.py`** *(legacy)* — original interactive runner that prompts for input via stdin. Still functional; will be deprecated once the v2 UX is signed off.
+You can install just this repository and pip will pull the underlying packages along with it.
+
+## Unified CLI (Recommended)
+
+After [installation](#setup-instructions), every pipeline step uses the same command shape (`pwa-<name>` to run, `pwa-init-<name>` to interactively build its config):
+
+```bash
+pwa-init-hydrocondition pwa_config.yml
+pwa-hydrocondition --config pwa_config.yml      # Step 0 — hydro-conditioning
+
+pwa-init-nc-processing nc_processing.yml
+pwa-nc-processing --config nc_processing.yml    # Step 1 — NetCDF / forcing processing
+
+pwa-init-raven-inputs raven_inputs.yml
+pwa-raven-inputs --config raven_inputs.yml      # Step 2 — Raven input generation
+
+pwa-init-calibration calibration.yml
+pwa-calibrate --config calibration.yml          # Step 3 — calibration
+```
+
+These commands are also available as Python modules (`python -m pwa_tools.run_step0`, `python -m pwa_raven.run_nc_processing`, etc.) for users who prefer that style.
+
+The `hydro_condition_v2.py` and `hydro_condition.py` scripts in this directory remain as backwards-compatibility shims for Step 0; new users should prefer `pwa-hydrocondition`.
+
+## Quick install (for the impatient)
+
+Today (GitHub-only, before the packages are on PyPI), clone all three source repos and pip-install them in dependency order:
+
+```bash
+git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
+git clone https://github.com/IISD-ELA/PWA.git
+git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-main.git
+
+conda create -n pwa python=3.12
+conda activate pwa
+conda install -c conda-forge gdal
+
+pip install -e ./PWA-hydro-conditioning-tools
+pip install -e ./PWA/pwa_raven
+pip install -e ./PWA/pwa_calibration
+pip install -e ./PWA-hydro-conditioning-main      # registers pwa-step0 .. pwa-step3 on PATH
+```
+
+Verify:
+
+```bash
+pwa-hydrocondition --help
+```
+
+**Future (post-PyPI publish)**: a single `pip install pwa` will replace the four-line install block above.
 
 ## Repository Structure
-```powershell
+```
 PWA-hydro-conditioning-main/
-├── hydro_condition_v2.py       # Recommended runner — reads pwa_config.yml
-├── hydro_condition.py          # Legacy runner — interactive input() prompts
-├── pwa_config.example.yml      # Sample config for hydro_condition_v2.py
+├── pyproject.toml              # Orchestrator package — declares pwa-tools / pwa-raven / pwa-calibration as deps + console scripts
+├── src/pwa/__init__.py         # Empty namespace anchor for the orchestrator package
+├── hydro_condition_v2.py       # Backwards-compat shim — equivalent to `pwa-step0`
+├── hydro_condition.py          # Legacy interactive runner (will be deprecated)
+├── pwa_config.example.yml      # Sample config for Step 0
 ├── README.md                   # This documentation
 ├── hydrocon_env.yml            # Conda environment file
 └── .gitignore                  # Tells Git to ignore the "Data" folder
