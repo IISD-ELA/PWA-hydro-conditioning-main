@@ -33,6 +33,65 @@ These commands are also available as Python modules (`python -m pwa_tools.run_st
 
 The `hydro_condition_v2.py` and `hydro_condition.py` scripts in this directory remain as backwards-compatibility shims for Step 0; new users should prefer `pwa-hydrocondition`.
 
+## Notebook / Python API usage
+
+The CLI is the easiest path for one-shot runs. Inside Jupyter or a custom script, import directly from the underlying packages — the `pwa` orchestrator is **CLI-only** and intentionally has no Python re-exports of its own. Importing from the source package keeps it obvious which package owns each function:
+
+**Step 0 — hydro-conditioning** (`pwa-tools`):
+```python
+from pwa_tools.config import PwaConfig
+from pwa_tools.runner import run_step0
+
+config = PwaConfig.from_yaml("pwa_config.yml")
+# or build programmatically: PwaConfig.from_dict({...})
+result = run_step0(config, generate_wetlands=False)
+
+print(result.depression_depths)   # path to the per-subbasin depression-depths shapefile
+print(result.depression_raster)   # path to the hydro-conditioned DEM
+```
+
+**Step 1 — NetCDF processing** (`pwa-raven`):
+```python
+from pwa_raven.nc_processing import NcProcessingConfig, run_nc_processing
+
+config = NcProcessingConfig.from_yaml("nc_processing.yml")
+result = run_nc_processing(config)
+
+print(result.subset_nc)      # PHyDAP subset NetCDF
+print(result.adjusted_nc)    # time-shifted NetCDF — fed into Step 2
+print(result.grid_weights)   # GridWeights.txt
+```
+
+**Step 2 — Raven input generation** (`pwa-raven`):
+```python
+from pwa_raven.raven_inputs import RavenInputsConfig, run_raven_inputs
+
+config = RavenInputsConfig.from_yaml("raven_inputs.yml")
+result = run_raven_inputs(config)
+
+print(result.rvi, result.rvp, result.rvh, result.rvc, result.model_rvt)
+```
+
+**Step 3 — calibration** (`pwa-calibration`):
+```python
+from pwa_calibration.setup import CalibrationConfig
+from pwa_calibration.runner import run_calibration
+
+config = CalibrationConfig.from_yaml("calibration.yml")
+result = run_calibration(config, db_suffix="notebook_run", repetitions=10)
+```
+
+### Common patterns
+
+- **`<Config>.from_yaml(path)`** loads a YAML file written by the corresponding `pwa-init-*` command. This is the most ergonomic path for notebooks — generate the config once interactively, then iterate in the notebook by reloading.
+- **`<Config>.from_dict({...})`** builds a config without ever touching the filesystem. Useful for parameter sweeps or programmatically generated configs.
+- **All `run_*` functions return a result dataclass** with `Path` attributes pointing at the produced files — easy to chain into matplotlib, geopandas, or rasterio for downstream analysis in the same notebook.
+- **The pipeline is logged through Python's standard `logging` module**. To see progress in a notebook, configure logging once at the top:
+  ```python
+  import logging
+  logging.basicConfig(level=logging.INFO, format="%(message)s")
+  ```
+
 ## Quick install (for the impatient)
 
 Today (GitHub-only, before the packages are on PyPI), clone all three source repos and pip-install them in dependency order:
