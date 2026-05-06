@@ -35,51 +35,55 @@ The `hydro_condition_v2.py` and `hydro_condition.py` scripts in this directory r
 
 ## Notebook / Python API usage
 
-The CLI is the easiest path for one-shot runs. Inside Jupyter or a custom script, import directly from the underlying packages — the `pwa` orchestrator is **CLI-only** and intentionally has no Python re-exports of its own. Importing from the source package keeps it obvious which package owns each function:
+The CLI is the easiest path for one-shot runs. Inside Jupyter or a custom script you have **two equivalent import styles** — pick whichever fits your code:
 
-**Step 0 — hydro-conditioning** (`pwa-tools`):
+### Style A — Umbrella import (recommended for notebooks)
+
+After installing the `pwa` package, every public callable and config class is available under a single namespace:
+
+```python
+import pwa
+
+# Step 0 — hydro-conditioning
+config0 = pwa.PwaConfig.from_yaml("pwa_config.yml")
+step0 = pwa.run_step0(config0, generate_wetlands=False)
+
+# Step 1 — NetCDF processing
+config1 = pwa.NcProcessingConfig.from_yaml("nc_processing.yml")
+step1 = pwa.run_nc_processing(config1)
+
+# Step 2 — Raven input generation
+config2 = pwa.RavenInputsConfig.from_yaml("raven_inputs.yml")
+step2 = pwa.run_raven_inputs(config2)
+
+# Step 3 — calibration
+config3 = pwa.CalibrationConfig.from_yaml("calibration.yml")
+step3 = pwa.run_calibration(config3, db_suffix="notebook_run", repetitions=10)
+```
+
+Or import only what you need:
+```python
+from pwa import PwaConfig, run_step0, NcProcessingConfig, run_nc_processing
+```
+
+`pwa.__all__` lists every re-exported symbol; `dir(pwa)` and IDE autocomplete both surface them.
+
+### Style B — Source-package imports
+
+Importing directly from the package that defines each function works the same and makes ownership explicit. Useful when reading code that crosses package boundaries, or when a future maintainer wants to know exactly where a callable lives:
+
 ```python
 from pwa_tools.config import PwaConfig
 from pwa_tools.runner import run_step0
 
-config = PwaConfig.from_yaml("pwa_config.yml")
-# or build programmatically: PwaConfig.from_dict({...})
-result = run_step0(config, generate_wetlands=False)
-
-print(result.depression_depths)   # path to the per-subbasin depression-depths shapefile
-print(result.depression_raster)   # path to the hydro-conditioned DEM
-```
-
-**Step 1 — NetCDF processing** (`pwa-raven`):
-```python
 from pwa_raven.nc_processing import NcProcessingConfig, run_nc_processing
-
-config = NcProcessingConfig.from_yaml("nc_processing.yml")
-result = run_nc_processing(config)
-
-print(result.subset_nc)      # PHyDAP subset NetCDF
-print(result.adjusted_nc)    # time-shifted NetCDF — fed into Step 2
-print(result.grid_weights)   # GridWeights.txt
-```
-
-**Step 2 — Raven input generation** (`pwa-raven`):
-```python
 from pwa_raven.raven_inputs import RavenInputsConfig, run_raven_inputs
 
-config = RavenInputsConfig.from_yaml("raven_inputs.yml")
-result = run_raven_inputs(config)
-
-print(result.rvi, result.rvp, result.rvh, result.rvc, result.model_rvt)
-```
-
-**Step 3 — calibration** (`pwa-calibration`):
-```python
 from pwa_calibration.setup import CalibrationConfig
 from pwa_calibration.runner import run_calibration
-
-config = CalibrationConfig.from_yaml("calibration.yml")
-result = run_calibration(config, db_suffix="notebook_run", repetitions=10)
 ```
+
+Behaviour is identical; the `pwa.*` symbols are direct re-exports of these.
 
 ### Common patterns
 

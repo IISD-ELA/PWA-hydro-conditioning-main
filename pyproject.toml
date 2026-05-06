@@ -41,3 +41,7 @@ pwa-init-calibration = "pwa_calibration.init_config:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--strict-markers", "--strict-config", "-ra"]
