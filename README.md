@@ -1,16 +1,159 @@
 # PWA-hydro-conditioning-main
 Author: Idil Yaktubay (iyaktubay@iisd-ela.org), IISD-ELA
 
-This repository provides a workflow to hydro-condition Prairie watersheds using the ```hydro_condition.py``` script. It is designed for use with the custom [PWA-hydro-conditioning-tools](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) Python package, and requires certain datasets as input.
+This repository is the **orchestrator entry point** for the PWA pipeline. Installing it gives you a unified command-line interface (`pwa-step0` … `pwa-step3`) for the four packages that implement the pipeline:
+
+| Package | Step(s) it owns | Source repo |
+|---|---|---|
+| [`pwa-tools`](https://github.com/IISD-ELA/PWA-hydro-conditioning-tools) | Step 0 — hydro-conditioning | PWA-hydro-conditioning-tools |
+| [`pwa-raven`](https://github.com/IISD-ELA/PWA) | Steps 1 & 2 — NetCDF processing + Raven inputs | PWA / pwa_raven |
+| [`pwa-calibration`](https://github.com/IISD-ELA/PWA) | Step 3 — calibration | PWA / pwa_calibration |
+
+You can install just this repository and pip will pull the underlying packages along with it.
+
+## Unified CLI (Recommended)
+
+After [installation](#setup-instructions), every pipeline step uses the same command shape (`pwa-<name>` to run, `pwa-init-<name>` to interactively build its config):
+
+```bash
+pwa-init-hydrocondition pwa_config.yml
+pwa-hydrocondition --config pwa_config.yml      # Step 0 — hydro-conditioning
+
+pwa-init-nc-processing nc_processing.yml
+pwa-nc-processing --config nc_processing.yml    # Step 1 — NetCDF / forcing processing
+
+pwa-init-raven-inputs raven_inputs.yml
+pwa-raven-inputs --config raven_inputs.yml      # Step 2 — Raven input generation
+                                                # (also writes RavenView visualization
+                                                #  files when rivers_shapefile is set)
+
+pwa-init-calibration calibration.yml
+pwa-calibrate --config calibration.yml          # Step 3 — calibration
+```
+
+### RavenView visualization
+
+When `rivers_shapefile` is set in `raven_inputs.yml`, `pwa-raven-inputs` also writes a [RavenView](https://raven.uwaterloo.ca/RavenView/RavenView.html)-compatible GeoJSON pair into `<output_dir>/Raven/RavenView/`:
+
+```
+<output_dir>/Raven/RavenView/
+    <watershed_name>.json         # subbasins
+    <watershed_name>Rivers.json   # rivers
+```
+
+Upload both at <https://raven.uwaterloo.ca/RavenView/RavenView.html> to render the watershed in the browser. Set `write_ravenview: false` to opt out, or leave `rivers_shapefile` unset to skip the export entirely. A standalone `pwa-ravenview` CLI exists for one-off exports outside the pipeline.
+
+These commands are also available as Python modules (`python -m pwa_tools.run_step0`, `python -m pwa_raven.run_nc_processing`, etc.) for users who prefer that style.
+
+The `hydro_condition_v2.py` and `hydro_condition.py` scripts in this directory remain as backwards-compatibility shims for Step 0; new users should prefer `pwa-hydrocondition`.
+
+## Notebook / Python API usage
+
+The CLI is the easiest path for one-shot runs. Inside Jupyter or a custom script you have **two equivalent import styles** — pick whichever fits your code:
+
+### Style A — Umbrella import (recommended for notebooks)
+
+After installing the `pwa` package, every public callable and config class is available under a single namespace:
+
+```python
+import pwa
+
+# Step 0 — hydro-conditioning
+config0 = pwa.PwaConfig.from_yaml("pwa_config.yml")
+step0 = pwa.run_step0(config0, generate_wetlands=False)
+
+# Step 1 — NetCDF processing
+config1 = pwa.NcProcessingConfig.from_yaml("nc_processing.yml")
+step1 = pwa.run_nc_processing(config1)
+
+# Step 2 — Raven input generation (also writes RavenView GeoJSON when
+# rivers_shapefile is set in the config).
+config2 = pwa.RavenInputsConfig.from_yaml("raven_inputs.yml")
+step2 = pwa.run_raven_inputs(config2)
+# step2.ravenview_subbasins and .ravenview_rivers point at the GeoJSON
+# pair, or are None if RavenView export was skipped.
+
+# Or generate a one-off RavenView export from an existing config:
+# sub, riv = pwa.export_for_ravenview_from_config(config2)
+
+# Step 3 — calibration
+config3 = pwa.CalibrationConfig.from_yaml("calibration.yml")
+step3 = pwa.run_calibration(config3, db_suffix="notebook_run", repetitions=10)
+```
+
+Or import only what you need:
+```python
+from pwa import PwaConfig, run_step0, NcProcessingConfig, run_nc_processing
+```
+
+`pwa.__all__` lists every re-exported symbol; `dir(pwa)` and IDE autocomplete both surface them.
+
+### Style B — Source-package imports
+
+Importing directly from the package that defines each function works the same and makes ownership explicit. Useful when reading code that crosses package boundaries, or when a future maintainer wants to know exactly where a callable lives:
+
+```python
+from pwa_tools.config import PwaConfig
+from pwa_tools.runner import run_step0
+
+from pwa_raven.nc_processing import NcProcessingConfig, run_nc_processing
+from pwa_raven.raven_inputs import RavenInputsConfig, run_raven_inputs
+
+from pwa_calibration.setup import CalibrationConfig
+from pwa_calibration.runner import run_calibration
+```
+
+Behaviour is identical; the `pwa.*` symbols are direct re-exports of these.
+
+### Common patterns
+
+- **`<Config>.from_yaml(path)`** loads a YAML file written by the corresponding `pwa-init-*` command. This is the most ergonomic path for notebooks — generate the config once interactively, then iterate in the notebook by reloading.
+- **`<Config>.from_dict({...})`** builds a config without ever touching the filesystem. Useful for parameter sweeps or programmatically generated configs.
+- **All `run_*` functions return a result dataclass** with `Path` attributes pointing at the produced files — easy to chain into matplotlib, geopandas, or rasterio for downstream analysis in the same notebook.
+- **The pipeline is logged through Python's standard `logging` module**. To see progress in a notebook, configure logging once at the top:
+  ```python
+  import logging
+  logging.basicConfig(level=logging.INFO, format="%(message)s")
+  ```
+
+## Quick install (for the impatient)
+
+Today (GitHub-only, before the packages are on PyPI), clone all three source repos and pip-install them in dependency order:
+
+```bash
+git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-tools.git
+git clone https://github.com/IISD-ELA/PWA.git
+git clone https://github.com/IISD-ELA/PWA-hydro-conditioning-main.git
+
+conda create -n pwa python=3.12
+conda activate pwa
+conda install -c conda-forge gdal
+
+pip install -e ./PWA-hydro-conditioning-tools
+pip install -e ./PWA/pwa_raven
+pip install -e ./PWA/pwa_calibration
+pip install -e ./PWA-hydro-conditioning-main      # registers pwa-step0 .. pwa-step3 on PATH
+```
+
+Verify:
+
+```bash
+pwa-hydrocondition --help
+```
+
+**Future (post-PyPI publish)**: a single `pip install pwa` will replace the four-line install block above.
 
 ## Repository Structure
-```powershell
-PWA-hydro-conditioning-main/                  
-├── hydro_condition_py.py       # Main script to run the hydro-conditioning pipeline
+```
+PWA-hydro-conditioning-main/
+├── pyproject.toml              # Orchestrator package — declares pwa-tools / pwa-raven / pwa-calibration as deps + console scripts
+├── src/pwa/__init__.py         # Empty namespace anchor for the orchestrator package
+├── hydro_condition_v2.py       # Backwards-compat shim — equivalent to `pwa-step0`
+├── hydro_condition.py          # Legacy interactive runner (will be deprecated)
+├── pwa_config.example.yml      # Sample config for Step 0
 ├── README.md                   # This documentation
-├── hydrocon_env.yml            # Environment file for the hydro-conditioning pipeline
-└── .gitignore                  # File that tells Git to ignore the "Data" folder created by the user
-
+├── hydrocon_env.yml            # Conda environment file
+└── .gitignore                  # Tells Git to ignore the "Data" folder
 ```
 
 ## Prerequisites
@@ -154,10 +297,35 @@ your-working-directory/
 <img width="450" height="339" alt="image" src="https://github.com/user-attachments/assets/a307cdca-e5ce-4f85-8038-73004327e639" />
 
 5.2 Open up terminal on Visual Studio Code once again if it's not already open and change your working directory to the ```PWA-hydro-conditioning-main``` folder if it's not already there.
-5.3 Run the following command to execute the hydro conditioning script. The script will ask you to input your watershed name as well as some file names.
+
+5.3 Run the pipeline. **Two options**:
+
+#### Option A (recommended): `hydro_condition_v2.py` with a config file
+
+Generate a config file once (interactively):
+```powershell
+python -m pwa_tools.init_config pwa_config.yml
+```
+The prompts mirror the legacy script's. Or, copy `pwa_config.example.yml` to `pwa_config.yml` and edit by hand.
+
+Then run the pipeline as many times as you like:
+```powershell
+python hydro_condition_v2.py
+python hydro_condition_v2.py --wetlands           # also generate wetlands shapefile
+python hydro_condition_v2.py --log-level DEBUG    # extra diagnostic output
+python hydro_condition_v2.py --config other.yml   # alternative config
+```
+
+The new runner fails fast (with a clear error listing every missing file) if your `Data/` folder is incomplete, instead of crashing partway through a 30-minute LiDAR resample.
+
+#### Option B (legacy): `hydro_condition.py` interactive prompts
+
+The original script that asks for filenames on every run:
 ```powershell
 python hydro_condition.py
 ```
+Still supported during the migration period.
+
 5.4 Once the script has fully run, you will see the output files under the ```Data\<watershed name you entered when prompted>\HydroConditioning\Processed``` folder:
 
 <img width="396" height="268" alt="image" src="https://github.com/user-attachments/assets/c48b59a7-3551-45eb-99a9-38567594141d" />

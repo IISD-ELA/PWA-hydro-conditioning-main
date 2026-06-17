@@ -2,4 +2,12 @@ Data/
 .vscode/
 
 !Data/cypress_river/HydroConditioning/Raw
- 
+
+# Python build/cache artifacts
+*.pyc
+__pycache__/
+*.egg-info/
+.pytest_cache/
+
+# Local tooling config
+.gh_config/
