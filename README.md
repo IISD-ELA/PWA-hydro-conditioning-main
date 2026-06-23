@@ -336,6 +336,49 @@ You can also see any intermediate files in the ```...\Interim``` folder:
 
 The output files include a depression depths raster .tif, depression depths shapefile, and a zonal statistics file for your watershed by default, as well as a wetland polygons shapefile with statistics (area, total storage, and median depth) if the user chooses to generate it.
 
+## Running tests
+
+This project uses `pytest`. From the repo root with the conda env activated:
+
+```bash
+python -m pytest -q
+```
+
+Each of the four packages (`pwa-tools`, `pwa-raven`, `pwa-calibration`, and this orchestrator) ships its own test suite. You can run them individually:
+
+```bash
+cd PWA-hydro-conditioning-tools && python -m pytest -q     # Step 0
+cd PWA/pwa_raven                && python -m pytest -q     # Steps 1-2
+cd PWA/pwa_calibration          && python -m pytest -q     # Step 3
+cd PWA-hydro-conditioning-main  && python -m pytest -q     # orchestrator
+```
+
+Useful flags during development:
+
+- `-q` — quiet output (one dot per test, summary at the end)
+- `-k <pattern>` — run only tests whose name matches the pattern
+- `-x` — stop on the first failure (fast feedback while iterating)
+- `--tb=short` — concise tracebacks
+
+Tests live in each package under `tests/unit/` and (where applicable) `tests/regression/`. All tests should pass before opening a pull request.
+
+## Contributing
+
+Workflow for adding a feature or fixing a bug:
+
+1. **Create a feature branch** off the default branch in the relevant repo (`main` for pwa-tools and the orchestrator, `master` for PWA). Use `feat/<short-name>` for features and `fix/<short-name>` for bug fixes — never commit directly to the default branch.
+2. **Write a failing test first** that describes the desired behavior. Run `python -m pytest -q` to confirm the new test fails. For bug fixes, the test should reproduce the bug.
+3. **Write code to make the test pass.** Run the suite again and confirm green.
+4. **Commit incrementally** with focused commit messages that explain *why* (the motivation, the problem, the trade-off) rather than just *what* (the diff is the *what*).
+5. **Open a pull request** against the default branch. Tag the relevant reviewer. The PR description should include a short summary, a test plan, and links to any related issues.
+
+Practical notes:
+
+- New features should ship with corresponding tests. If a unit test is hard to write, that's often a signal the design needs refactoring.
+- Avoid disabling, skipping, or commenting out tests to make builds pass — investigate the root cause and fix it properly.
+- Keep commits small and atomic. If you find yourself making unrelated changes in the same commit, split them.
+- Don't add features beyond what the issue/PR scope requires. YAGNI — build for the current need, refactor later when a second use case emerges.
+
 ### 6. Contact and support
 For support or any other inquiries, please contact us at eladata@iisd.net.
 
