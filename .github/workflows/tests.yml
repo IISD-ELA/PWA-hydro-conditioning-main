@@ -1,0 +1,67 @@
+name: tests
+
+on:
+  push:
+    branches: ["main", "dev", "ci/**"]
+  pull_request:
+    branches: ["main", "dev"]
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+# The orchestrator's re-export test does `import pwa`, which pulls in all
+# three step packages. None are on PyPI yet, so CI checks out the sibling
+# repos and installs every package from source before running the suite.
+#
+# Sibling repos are checked out at their DEFAULT branches (PWA -> master,
+# PWA-hydro-conditioning-tools -> main), which already carry the refactored
+# packages. If either repo is private, add a repo-scoped PAT as the
+# CI_REPO_TOKEN secret; for public repos the default GITHUB_TOKEN suffices.
+jobs:
+  reexports:
+    name: orchestrator re-export tests (py3.11)
+    runs-on: ubuntu-latest
+    env:
+      CHECKOUT_TOKEN: ${{ secrets.CI_REPO_TOKEN || github.token }}
+    steps:
+      - name: Checkout orchestrator (pwa)
+        uses: actions/checkout@v4
+        with:
+          path: pwa-main
+
+      - name: Checkout PWA (pwa-raven + pwa-calibration)
+        uses: actions/checkout@v4
+        with:
+          repository: IISD-ELA/PWA
+          ref: master
+          path: _deps/PWA
+          token: ${{ env.CHECKOUT_TOKEN }}
+
+      - name: Checkout PWA-hydro-conditioning-tools (pwa-tools)
+        uses: actions/checkout@v4
+        with:
+          repository: IISD-ELA/PWA-hydro-conditioning-tools
+          ref: main
+          path: _deps/PWA-hydro-conditioning-tools
+          token: ${{ env.CHECKOUT_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install all step packages from source
+        # Order matters: pwa-calibration depends on pwa-raven. Installing the
+        # three step packages first means the orchestrator's own deps are
+        # already satisfied locally (none are on PyPI).
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./_deps/PWA-hydro-conditioning-tools
+          pip install -e ./_deps/PWA/pwa_raven
+          pip install -e ./_deps/PWA/pwa_calibration
+          pip install -e "./pwa-main[dev]"
+
+      - name: Run unit tests
+        working-directory: pwa-main
+        run: pytest tests/unit -m "not integration and not regression and not slow"
