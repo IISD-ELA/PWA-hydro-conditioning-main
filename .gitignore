@@ -8,6 +8,10 @@ Data/
 __pycache__/
 *.egg-info/
 .pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
 
 # Local tooling config
 .gh_config/
