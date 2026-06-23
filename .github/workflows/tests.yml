@@ -10,70 +10,27 @@ concurrency:
   group: tests-${{ github.ref }}
   cancel-in-progress: true
 
-# The orchestrator's re-export test does `import pwa`, which pulls in all
-# three step packages. None are on PyPI yet, so CI checks out the sibling
-# repos and installs every package from source before running the suite.
-#
-# Sibling repos are checked out at their DEFAULT branches (PWA -> master,
-# PWA-hydro-conditioning-tools -> main), which already carry the refactored
-# packages. If either repo is private, add a repo-scoped PAT as the
-# CI_REPO_TOKEN secret; for public repos the default GITHUB_TOKEN suffices.
+# The orchestrator's re-export test does `import pwa`, which needs all three
+# step packages. Those live in separate private repos and are not on PyPI, so
+# running the suite here would require checking them out with a cross-repo PAT
+# — an unwanted person/credential dependency. Instead we only verify that the
+# package builds (sdist + wheel) from its pyproject. The actual step logic is
+# tested in its own repos (pwa-tools, pwa-raven, pwa-calibration).
 jobs:
-  reexports:
-    name: orchestrator re-export tests (py3.11)
+  build:
+    name: build package (py3.11)
     runs-on: ubuntu-latest
-    env:
-      CHECKOUT_TOKEN: ${{ secrets.CI_REPO_TOKEN || github.token }}
     steps:
-      - name: Checkout orchestrator (pwa)
-        uses: actions/checkout@v4
-        with:
-          path: pwa-main
-
-      - name: Checkout PWA (pwa-raven + pwa-calibration)
-        uses: actions/checkout@v4
-        with:
-          repository: IISD-ELA/PWA
-          ref: master
-          path: _deps/PWA
-          token: ${{ env.CHECKOUT_TOKEN }}
-
-      - name: Checkout PWA-hydro-conditioning-tools (pwa-tools)
-        uses: actions/checkout@v4
-        with:
-          repository: IISD-ELA/PWA-hydro-conditioning-tools
-          ref: main
-          path: _deps/PWA-hydro-conditioning-tools
-          token: ${{ env.CHECKOUT_TOKEN }}
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
 
-      - name: Install all step packages from source
-        # Order matters: pwa-calibration depends on pwa-raven. Installing the
-        # three step packages first means the orchestrator's own deps are
-        # already satisfied locally (none are on PyPI).
+      - name: Build sdist and wheel
+        # `python -m build` builds the distribution from pyproject without
+        # installing the (unpublished) runtime dependencies, so no sibling
+        # repos or secrets are needed.
         run: |
-          python -m pip install --upgrade pip
-          pip install -e ./_deps/PWA-hydro-conditioning-tools
-          pip install -e ./_deps/PWA/pwa_raven
-          pip install -e ./_deps/PWA/pwa_calibration
-          pip install -e "./pwa-main[dev]"
-
-      - name: Run unit tests (with coverage)
-        working-directory: pwa-main
-        # Coverage is reported, never enforced — no --cov-fail-under.
-        run: >
-          pytest tests/unit
-          -m "not integration and not regression and not slow"
-          --cov=pwa --cov-report=term-missing --cov-report=xml
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-pwa-orchestrator
-          path: pwa-main/coverage.xml
-          if-no-files-found: ignore
+          python -m pip install --upgrade pip build
+          python -m build
