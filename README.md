@@ -45,8 +45,6 @@ Upload both at <https://raven.uwaterloo.ca/RavenView/RavenView.html> to render t
 
 These commands are also available as Python modules (`python -m pwa_tools.run_step0`, `python -m pwa_raven.run_nc_processing`, etc.) for users who prefer that style.
 
-The `hydro_condition_v2.py` and `hydro_condition.py` scripts in this directory remain as backwards-compatibility shims for Step 0; new users should prefer `pwa-hydrocondition`.
-
 ## Notebook / Python API usage
 
 The CLI is the easiest path for one-shot runs. Inside Jupyter or a custom script you have **two equivalent import styles** — pick whichever fits your code:
@@ -148,8 +146,6 @@ pwa-hydrocondition --help
 PWA-hydro-conditioning-main/
 ├── pyproject.toml              # Orchestrator package — declares pwa-tools / pwa-raven / pwa-calibration as deps + console scripts
 ├── src/pwa/__init__.py         # Empty namespace anchor for the orchestrator package
-├── hydro_condition_v2.py       # Backwards-compat shim — equivalent to `pwa-step0`
-├── hydro_condition.py          # Legacy interactive runner (will be deprecated)
 ├── pwa_config.example.yml      # Sample config for Step 0
 ├── README.md                   # This documentation
 ├── hydrocon_env.yml            # Conda environment file
@@ -269,7 +265,7 @@ On branch main
 Your branch is up to date with 'origin/main'.
 ```
 ### 4. Prepare the input data
-Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder and download and extract the following zip files into it. Do **not** create any subfolders in the ```Data/``` folder as the ```hydro_condition.py``` script expects all data files to **not** be in subfolders. The script will automatically organize input and output files into subfolders itself.
+Create a ```Data/``` folder inside the ```PWA-hydro-conditioning-main``` folder and download and extract the following zip files into it. Do **not** create any subfolders in the ```Data/``` folder — the Step 0 runner expects all input data files to live at the top level of ```Data/``` and will organize input and output files into subfolders itself.
 - Watershed of interest based on outlet point from the [CLRH Hydrofabrics website](https://hydrology.uwaterloo.ca/CLRH/Hydrofabric.html) (e.g., ID: 05OE006 for Manning Canal)
 - Streams dataset of interest from [NHN streams website](https://ftp.maps.canada.ca/pub/nrcan_rncan/vector/geobase_nhn_rhn/shp_en/).
      1. In the directory, open the folder named with the first two digits of your CLRH station ID (e.g., open the ```05/``` folder if your CLRH station ID is ```05OE006```).
@@ -282,7 +278,6 @@ Your local workspace should now have the following structure:
 ```powershell
 your-working-directory/
 ├── PWA-hydro-conditioning-main/
-    ├── hydro_condition.py
     ├── README.md
     ├── .gitignore
     └── Data
@@ -291,40 +286,27 @@ your-working-directory/
     └──  ...repository contents...
 ```
 
-### 5. Run the hydroconditioning script
+### 5. Run the hydroconditioning pipeline
 5.1 On Visual Studio Code's welcome page, open the ```PWA-hydro-conditioning-main``` folder by clicking "Open folder...":
 
 <img width="450" height="339" alt="image" src="https://github.com/user-attachments/assets/a307cdca-e5ce-4f85-8038-73004327e639" />
 
 5.2 Open up terminal on Visual Studio Code once again if it's not already open and change your working directory to the ```PWA-hydro-conditioning-main``` folder if it's not already there.
 
-5.3 Run the pipeline. **Two options**:
-
-#### Option A (recommended): `hydro_condition_v2.py` with a config file
-
-Generate a config file once (interactively):
+5.3 Generate a config file once (interactively):
 ```powershell
-python -m pwa_tools.init_config pwa_config.yml
+pwa-init-hydrocondition pwa_config.yml
 ```
-The prompts mirror the legacy script's. Or, copy `pwa_config.example.yml` to `pwa_config.yml` and edit by hand.
+The prompts walk through the inputs. Or copy `pwa_config.example.yml` to `pwa_config.yml` and edit by hand.
 
 Then run the pipeline as many times as you like:
 ```powershell
-python hydro_condition_v2.py
-python hydro_condition_v2.py --wetlands           # also generate wetlands shapefile
-python hydro_condition_v2.py --log-level DEBUG    # extra diagnostic output
-python hydro_condition_v2.py --config other.yml   # alternative config
+pwa-hydrocondition --config pwa_config.yml
+pwa-hydrocondition --config pwa_config.yml --wetlands         # also generate wetlands shapefile
+pwa-hydrocondition --config pwa_config.yml --log-level DEBUG  # extra diagnostic output
 ```
 
-The new runner fails fast (with a clear error listing every missing file) if your `Data/` folder is incomplete, instead of crashing partway through a 30-minute LiDAR resample.
-
-#### Option B (legacy): `hydro_condition.py` interactive prompts
-
-The original script that asks for filenames on every run:
-```powershell
-python hydro_condition.py
-```
-Still supported during the migration period.
+`pwa-hydrocondition` fails fast (with a clear error listing every missing file) if your `Data/` folder is incomplete, instead of crashing partway through a 30-minute LiDAR resample. The same command is also runnable as `python -m pwa_tools.run_step0` for environments where executable invocations are restricted.
 
 5.4 Once the script has fully run, you will see the output files under the ```Data\<watershed name you entered when prompted>\HydroConditioning\Processed``` folder:
 
