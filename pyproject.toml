@@ -50,3 +50,8 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = ["--strict-markers", "--strict-config", "-ra"]
+markers = [
+    "integration: end-to-end tests that invoke external binaries (Raven, gdal, WBT) or span all pipeline steps; local-only",
+    "regression: tests requiring real watershed data",
+    "slow: tests taking more than ~30 seconds",
+]
